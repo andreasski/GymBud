@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "declaration": true,
+    "target": "es6",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "jsx": "react",
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "outDir": "./build"
+  },
+  "includes" : [
+    "*.tsx",
+    "*.ts"
+  ]
+}
