@@ -1,12 +1,20 @@
 import { combineReducers } from 'redux';
 
-import { muscleGroupsReducer } from './MuscleGroups/reducer';
-import { MuscleGroupsState } from './MuscleGroups/types';
+import { muscleGroupReducer } from './MuscleGroup/reducer';
+import { MuscleGroupState } from './MuscleGroup/types';
+import { ExerciseState } from './Exercise/types';
+import { exerciseReducer } from './Exercise/reducer';
+import { workoutReducer } from './Workout/reducer';
+import { WorkoutState } from './Workout/types';
 
-export interface rootReducer {
-  muscleGroups: MuscleGroupsState;
+export interface RootReducer {
+  muscleGroup: MuscleGroupState;
+  exercise: ExerciseState;
+  workout: WorkoutState;
 }
 
 export default combineReducers({
-  muscleGroups: muscleGroupsReducer,
+  muscleGroup: muscleGroupReducer,
+  exercise: exerciseReducer,
+  workout: workoutReducer,
 });

@@ -6,18 +6,24 @@ import { ICON_SIZE, ICON_DEFAULT_COLOR, ICON_DEFALT_SIZE } from './types';
 
 interface IconProps {
   active?: boolean;
+  background?: string;
   color?: string;
   name: string;
   size?: 'small' | 'medium' | 'large';
 }
 
-export const Icon = ({ active, color, name, size }: IconProps): JSX.Element => {
+export const Icon = ({
+  active,
+  background,
+  color,
+  name,
+  size,
+}: IconProps): JSX.Element => {
   const iconSize = ICON_SIZE[size];
-
-  console.log(active);
 
   const styles = StyleSheet.create({
     icon: {
+      backgroundColor: background,
       color: color || ICON_DEFAULT_COLOR,
       fontSize: iconSize || ICON_DEFALT_SIZE,
     },

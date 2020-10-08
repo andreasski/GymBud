@@ -1,66 +1,65 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Card, Input, CardItem, Text, H3 } from 'native-base';
+import { StackScreenProps } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/StackMenu/Home';
 
 import { AbstractScreenProps } from '../../abstract/ScreenProps';
-import { MUSCLE_GROUP_OVERVIEW } from '../types';
+import { HomeStackScreens } from '../types';
+import { FormCard } from '../../components/Card/FormCard';
+import { ButtonCard } from '../../components/Card';
+import { useDispatch } from 'react-redux';
+import { generateUUID } from '../../helpers/UUID';
+import { createWorkout } from '../../store/Workout/actions';
 
-type LandingScreenProps = AbstractScreenProps;
+export interface LandingScreenProps
+  extends StackScreenProps<HomeStackParamList, HomeStackScreens.LANDING_SCREEN>,
+    AbstractScreenProps {}
 
-export const LandingScreen = (props): JSX.Element => {
-  const styles = StyleSheet.create({
-    minimalCards: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-  });
+export const LandingScreen = ({
+  navigation,
+  labels,
+}: LandingScreenProps): JSX.Element => {
+  const dispatch = useDispatch();
 
-  const navMuscleGroupsOverview = () => {
-    props.navigation.navigate(MUSCLE_GROUP_OVERVIEW);
+  const [workoutName, setWorkoutName] = React.useState('');
+
+  const navMuscleGroupOverview = () => {
+    navigation.navigate(HomeStackScreens.MUSCLE_GROUP_OVERVIEW);
+  };
+
+  const navExerciseOverview = () => {
+    navigation.navigate(HomeStackScreens.EXERCISE_OVERVIEW);
+  };
+
+  const navNewWorkout = () => {
+    dispatch(createWorkout({ id: generateUUID(), name: workoutName, sets: [] }));
+    navigation.navigate(HomeStackScreens.WORKOUT_EDIT, {
+      name: workoutName,
+    });
   };
 
   return (
     <ScrollView>
-      <Card>
-        <CardItem header bordered>
-          <H3>{props.labels.WORKOUT_HEADING}</H3>
-        </CardItem>
-        <CardItem>
-          <Input placeholder={props.labels.WORKOUT_NAME_PLACEHOLDER} />
-          <Button>
-            <Text>{props.labels.CREATE}</Text>
-          </Button>
-        </CardItem>
-      </Card>
+      <FormCard
+        title={labels.WORKOUT_HEADING}
+        placeholder={labels.WORKOUT_NAME_PLACEHOLDER}
+        submitLabel={labels.CREATE}
+        value={workoutName}
+        onChange={setWorkoutName}
+        onSubmit={navNewWorkout}
+      />
+      <ButtonCard
+        title={labels.EXERCISE_HEADING}
+        buttonLabel={labels.MANAGE}
+        onPress={navExerciseOverview}
+      />
 
-      <Card>
-        <CardItem style={styles.minimalCards}>
-          <Text>{props.labels.HISTORY_HEADING}</Text>
-          <Button>
-            <Text>{props.labels.VIEW}</Text>
-          </Button>
-        </CardItem>
-      </Card>
-
-      <Card>
-        <CardItem style={styles.minimalCards}>
-          <Text>{props.labels.EXERCISE_HEADING}</Text>
-          <Button>
-            <Text>{props.labels.MANAGE}</Text>
-          </Button>
-        </CardItem>
-      </Card>
-
-      <Card>
-        <CardItem style={styles.minimalCards}>
-          <Text>{props.labels.MUSCLE_GROUP_HEADING}</Text>
-          <Button onPress={navMuscleGroupsOverview}>
-            <Text>{props.labels.MANAGE}</Text>
-          </Button>
-        </CardItem>
-      </Card>
+      <ButtonCard
+        title={labels.MUSCLE_GROUP_HEADING}
+        buttonLabel={labels.MANAGE}
+        onPress={navMuscleGroupOverview}
+      />
     </ScrollView>
   );
 };
@@ -72,7 +71,7 @@ LandingScreen.defaultProps = {
     MANAGE: 'Manage',
     VIEW: 'View',
 
-    EXERCISE_HEADING: 'Exercises',
+    EXERCISE_HEADING: 'Exercise',
     HISTORY_HEADING: 'Workout history',
     MUSCLE_GROUP_HEADING: 'Muscle groups',
     WORKOUT_HEADING: 'New workout',

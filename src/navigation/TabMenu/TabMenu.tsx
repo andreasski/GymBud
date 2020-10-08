@@ -1,19 +1,21 @@
 import React from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { Home } from '../StackMenu/Home';
+import { CombinedDarkTheme } from '../../../App';
 
 export const TabMenu = (): JSX.Element => {
   const Tab = createBottomTabNavigator();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={CombinedDarkTheme}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+            let iconName: string;
 
             if (route.name === 'Home') {
               iconName = focused ? 'home' : 'ios-information-circle-outline';
@@ -21,14 +23,9 @@ export const TabMenu = (): JSX.Element => {
               iconName = focused ? 'ios-list-box' : 'ios-list';
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-        })}
-        tabBarOptions={{
-          activeTintColor: '#707070',
-          inactiveTintColor: '#AAAAAA',
-        }}>
+        })}>
         <Tab.Screen name="Home" component={Home} />
       </Tab.Navigator>
     </NavigationContainer>

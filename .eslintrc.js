@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
 module.exports = {
@@ -17,6 +18,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
+    'plugin:@typescript-eslint/recommended',
     '@react-native-community',
   ],
   parserOptions: {
@@ -26,6 +28,7 @@ module.exports = {
       jsx: true,
     },
   },
+  plugins: ['@typescript-eslint'],
   overrides: [
     {
       files: ['*.ts', '*.tsx', '.*.ts', '.*.tsx'],
@@ -34,12 +37,6 @@ module.exports = {
       },
       extends: ['plugin:@typescript-eslint/recommended'],
       rules: {
-        // ...as we do for js code.
-        '@typescript-eslint/indent': ['error', 2],
-
-        // We will be using require in some of the code, especially in the build.
-        '@typescript-eslint/no-var-requires': 'off',
-
         // See `no-use-before-define`.
         '@typescript-eslint/no-use-before-define': [
           'error',

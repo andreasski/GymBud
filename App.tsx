@@ -2,26 +2,46 @@ import React from 'react';
 
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Root } from 'native-base';
 
+import { DarkTheme as NavigationDarkTheme } from '@react-navigation/native';
+import { persistStore, persistReducer } from 'redux-persist';
 import { TabMenu } from './src/navigation/TabMenu/';
+import { PersistGate } from 'redux-persist/integration/react';
+import AsyncStorage from '@react-native-community/async-storage';
 import rootReducer from './src/store/rootReducer';
 
-// @TODO: This is to hide a Warning caused by NativeBase after upgrading to RN 0.62
-import { YellowBox } from 'react-native';
+import {
+  Provider as PaperProvider,
+  DarkTheme as PaperDarkTheme,
+} from 'react-native-paper';
 
-YellowBox.ignoreWarnings([
-  'Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`',
-]);
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const CombinedDarkTheme = {
+  ...PaperDarkTheme,
+  ...NavigationDarkTheme,
+  colors: {
+    ...PaperDarkTheme.colors,
+    ...NavigationDarkTheme.colors,
+  },
+};
 
 const App = (): JSX.Element => {
-  const store = createStore(rootReducer);
+  const store = createStore(persistedReducer);
+  const persistor = persistStore(store);
 
   return (
     <Provider store={store}>
-      <Root>
-        <TabMenu />
-      </Root>
+      <PersistGate persistor={persistor}>
+        <PaperProvider theme={CombinedDarkTheme}>
+          <TabMenu />
+        </PaperProvider>
+      </PersistGate>
     </Provider>
   );
 };
